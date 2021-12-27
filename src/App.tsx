@@ -6,25 +6,55 @@ function App() {
   const [xValue, setXValue] = useState<null | string>(null);
   const [yValue, setYValue] = useState(null);
   const [fValue, setFValue] = useState(null);
-  const [moveValue, setMoveValue] = useState("");
-  const [commands]: any[] = useState([]);
+  const [commands, setCommands] = useState<any[]>([]);
 
-  const options: any[] = [
+  const numberOptions: any[] = [
     { value: "0", label: "0" },
     { value: "1", label: "1" },
     { value: "2", label: "2" },
     { value: "3", label: "3" },
     { value: "4", label: "4" },
   ];
+
+  const directionOptions: any[] = [
+    { value: "NORTH", label: "NORTH" },
+    { value: "SOUTH", label: "SOUTH" },
+    { value: "EAST", label: "EAST" },
+    { value: "WEST", label: "WEST" },
+  ];
+
   const handlePlaceClick = (x: any, y: any, f: any) => {
     if (!x || !y || !f) {
       return alert("Missing X, Y and/or F values");
     }
-    commands.push([`PLACE (${x}, ${y}, ${f})`]);
+    const newCommands = commands.concat(
+      `\n PLACE (${x.value}, ${y.value}, ${f.value})`
+    );
+    setCommands(newCommands);
     setXValue(null);
     setYValue(null);
     setFValue(null);
     return;
+  };
+
+  const handleMoveClick = () => {
+    const newCommands: any = commands.concat("\n MOVE");
+    return setCommands(newCommands);
+  };
+
+  const handleLeftClick = () => {
+    const newCommands: any = commands.concat("\n LEFT");
+    return setCommands(newCommands);
+  };
+
+  const handleRightClick = () => {
+    const newCommands: any = commands.concat("\n RIGHT");
+    return setCommands(newCommands);
+  };
+
+  const handleReportClick = () => {
+    const newCommands: any = commands.concat("\n REPORT");
+    return setCommands(newCommands);
   };
 
   return (
@@ -36,7 +66,7 @@ function App() {
           <Select
             className="Select-place"
             placeholder="X"
-            options={options}
+            options={numberOptions}
             value={xValue}
             onChange={setXValue}
           />
@@ -44,7 +74,7 @@ function App() {
           <Select
             className="Select-place"
             placeholder="Y"
-            options={options}
+            options={numberOptions}
             value={yValue}
             onChange={setYValue}
           />
@@ -52,7 +82,7 @@ function App() {
           <Select
             className="Select-place"
             placeholder="F"
-            options={options}
+            options={directionOptions}
             value={fValue}
             onChange={setFValue}
           />
@@ -63,19 +93,19 @@ function App() {
         </div>
         <div>
           <label>MOVE</label>
-          <button>+</button>
+          <button onClick={() => handleMoveClick()}>+</button>
         </div>
         <div>
           <label>LEFT</label>
-          <button>+</button>
+          <button onClick={() => handleLeftClick()}>+</button>
         </div>
         <div>
           <label>RIGHT</label>
-          <button>+</button>
+          <button onClick={() => handleRightClick()}>+</button>
         </div>
         <div>
           <label>REPORT</label>
-          <button>+</button>
+          <button onClick={() => handleReportClick()}>+</button>
         </div>
         <div>
           <textarea readOnly value={commands} />
